@@ -13,6 +13,12 @@ import {
 import "@xyflow/react/dist/style.css";
 import { initialEdges, initialNodes } from "./Workflow.constants";
 import { useCallback } from "react";
+import AmountInit from "./CustomNodes/AmountInit";
+import StartNode from "./CustomNodes/StartNode";
+
+const nodeTypes = {
+  startNode: StartNode,
+};
 
 const Workflow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -38,7 +44,8 @@ const Workflow = () => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        fitView
+        nodeTypes={nodeTypes}
+        // fitView
       >
         <Background />
         <Controls />
