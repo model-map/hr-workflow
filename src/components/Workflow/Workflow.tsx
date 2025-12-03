@@ -1,22 +1,35 @@
 "use client";
 
-import { useState, useCallback } from "react";
 import {
   ReactFlow,
-  applyNodeChanges,
-  applyEdgeChanges,
-  addEdge,
   Background,
   Controls,
   useNodesState,
   useEdgesState,
+  Connection,
+  addEdge,
+  Edge,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { initialEdges, initialNodes } from "./Workflow.constants";
+import { useCallback } from "react";
 
 const Workflow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  const onConnect = useCallback(
+    (connection: Connection) => {
+      const edge: Edge = {
+        ...connection,
+        animated: true,
+        id: crypto.randomUUID(),
+      };
+      setEdges((prevEdges) => addEdge(edge, prevEdges));
+    },
+    [setEdges]
+  );
+
   return (
     <div className="h-3/4 w-3/4 border border-dotted border-black">
       <ReactFlow
@@ -24,6 +37,8 @@ const Workflow = () => {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        fitView
       >
         <Background />
         <Controls />

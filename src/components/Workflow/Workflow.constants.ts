@@ -33,11 +33,4 @@ export const initialNodes: Node[] = [
   },
 ];
 
-export const initialEdges: Edge[] = [
-  {
-    id: "1-2",
-    source: "1",
-    target: "2",
-    animated: true,
-  },
-];
+export const initialEdges: Edge[] = [];
