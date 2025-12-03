@@ -17,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Position } from "@xyflow/react";
+import CustomHandle from "../CustomHandle";
 
 // FORM SCHEMA SPECS HERE
 const formSchema = z.object({
@@ -30,7 +32,7 @@ const StartNode = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "Start Node Title here",
+      title: "",
       metadata: {},
     },
   });
@@ -54,11 +56,9 @@ const StartNode = () => {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="Enter Task Title" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your Task&apos;s Title
-                  </FormDescription>
+                  <FormDescription></FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -102,6 +102,7 @@ const StartNode = () => {
           </form>
         </Form>
       </Card>
+      <CustomHandle type="source" position={Position.Bottom} />
     </div>
   );
 };
