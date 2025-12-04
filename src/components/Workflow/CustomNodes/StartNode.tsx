@@ -17,8 +17,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Position } from "@xyflow/react";
+import { NodeProps, Position, useReactFlow } from "@xyflow/react";
 import CustomHandle from "../CustomHandle";
+import { Trash2 } from "lucide-react";
+import DeleteNode from "../DeleteNode";
 
 // FORM SCHEMA SPECS HERE
 const formSchema = z.object({
@@ -28,7 +30,7 @@ const formSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
-const StartNode = () => {
+const StartNode = ({ id }: NodeProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,6 +44,8 @@ const StartNode = () => {
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
+  const { setNodes } = useReactFlow();
 
   return (
     <div>
@@ -102,6 +106,7 @@ const StartNode = () => {
             <Button type="submit">Submit</Button>
           </form>
         </Form>
+        <DeleteNode id={id} />
       </Card>
       <CustomHandle type="source" position={Position.Bottom} />
     </div>
