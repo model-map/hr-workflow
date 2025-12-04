@@ -14,24 +14,26 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 // FORM SCHEMA SPECS HERE
 const formSchema = z.object({
   title: z.string().min(5, {
     message: "Title must be at least 5 characters.",
   }),
-  metadata: z.record(z.string(), z.unknown()).optional(),
+  description: z.string().min(5, {
+    message: "Description must be at least 5 characters.",
+  }),
+  assignee: z.string().min(3, {
+    message: "Assignee must be at least 3 characters.",
+  }),
 });
 
-const StartNodeForm = () => {
-  const [metaKey, setMetaKey] = useState("");
+const TaskNodeForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      metadata: {},
-    },
+    defaultValues: {},
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -48,7 +50,7 @@ const StartNodeForm = () => {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Title*</FormLabel>
               <FormControl>
                 <Input placeholder="Enter Task Title" {...field} />
               </FormControl>
@@ -58,34 +60,25 @@ const StartNodeForm = () => {
         />
         <FormField
           control={form.control}
-          name="metadata"
+          name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Metadata</FormLabel>
+              <FormLabel>Description</FormLabel>
               <FormControl>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="key"
-                    onChange={(e) => {
-                      const newKey = e.target.value;
-                      setMetaKey(newKey);
-                      field.onChange({
-                        ...(field.value ?? {}),
-                        [newKey]: Object.values(field.value ?? {})[0],
-                      });
-                    }}
-                  />
-                  <Input
-                    placeholder="value"
-                    onChange={(e) => {
-                      const key = Object.keys(field.value ?? {})[0];
-                      if (!key) return;
-                      field.onChange({
-                        [metaKey]: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
+                <Input placeholder="Enter Description" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="assignee"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Assignee</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter Assignee name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,4 +89,4 @@ const StartNodeForm = () => {
     </Form>
   );
 };
-export default StartNodeForm;
+export default TaskNodeForm;

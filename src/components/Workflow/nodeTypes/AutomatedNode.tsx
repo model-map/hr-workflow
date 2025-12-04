@@ -5,18 +5,19 @@ import { Label } from "@/components/ui/label";
 import { NodeProps, Position } from "@xyflow/react";
 import CustomHandle from "../CustomHandle";
 import DeleteNode from "../DeleteNode";
-import StartNodeForm from "../forms/StartNodeForm";
 
-const StartNode = ({ id }: NodeProps) => {
+const AutomatedNode = ({ id }: NodeProps) => {
   return (
     <div>
-      <Label>Start Node</Label>
+      <Label>Automated Node</Label>
+
       <Card className="mt-2 py-8 px-4">
-        <StartNodeForm />
+        {/* <AutomatedNodeForm /> */}
         <DeleteNode id={id} />
       </Card>
       <CustomHandle type="source" position={Position.Bottom} />
+      <CustomHandle type="source" position={Position.Top} />
     </div>
   );
 };
-export default StartNode;
+export default AutomatedNode;
