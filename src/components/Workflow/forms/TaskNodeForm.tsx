@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn_ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import { useState } from "react";
-import { Node } from "@xyflow/react";
+import { Node, useReactFlow } from "@xyflow/react";
 
 // FORM SCHEMA SPECS HERE
 const formSchema = z.object({
@@ -33,6 +33,7 @@ const formSchema = z.object({
 });
 
 const TaskNodeForm = ({ node }: { node: Node }) => {
+  const { setNodes } = useReactFlow();
   const [metaKey, setMetaKey] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,9 +47,10 @@ const TaskNodeForm = ({ node }: { node: Node }) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    // SET NODE DATA HERE
+    setNodes((nodes) =>
+      nodes.map((n) => (n.id === node.id ? { ...node, data: values } : n))
+    );
   }
 
   return (

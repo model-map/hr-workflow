@@ -74,6 +74,11 @@ const Workflow = () => {
     }
   };
 
+  const formMap: Record<string, (node: Node) => JSX.Element> = {
+    startNode: (node) => <StartNodeForm node={node} />,
+    taskNode: (node) => <TaskNodeForm node={node} />,
+  };
+
   return (
     <div className="h-[90%] w-[90%] border border-dotted border-black">
       {selectedNode && (
@@ -85,10 +90,10 @@ const Workflow = () => {
         >
           <div className="z-20 p-4">
             {selectedNode.type === "startNode" && (
-              <StartNodeForm node={selectedNode} />
+              <StartNodeForm key={selectedNode.id} node={selectedNode} />
             )}
             {selectedNode.type === "taskNode" && (
-              <TaskNodeForm node={selectedNode} />
+              <TaskNodeForm key={selectedNode.id} node={selectedNode} />
             )}
           </div>
         </div>
