@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/shadcn_ui/card";
 import { Label } from "@/components/shadcn_ui/label";
-import { Node, NodeProps, Position } from "@xyflow/react";
+import { NodeProps, Position } from "@xyflow/react";
 import CustomHandle from "../CustomHandle";
 import DeleteNode from "../DeleteNode";
 // import StartNodeForm from "../forms/StartNodeForm";

@@ -32,10 +32,12 @@ const formSchema = z.object({
 });
 
 const StartNodeForm = ({ node }: { node: Node }) => {
-  const { setNodes } = useReactFlow();
+  const { updateNodeData } = useReactFlow();
   const nodeData: NodeData | undefined = node.data;
   const title = nodeData?.title ?? "";
   const metadata = nodeData?.metadata ?? {};
+
+  console.log("NODE :", node);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,10 +48,8 @@ const StartNodeForm = ({ node }: { node: Node }) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // SET NODE DATA HERE
-    setNodes((nodes) =>
-      nodes.map((n) => (n.id === node.id ? { ...node, data: values } : n))
-    );
+    // UPDATE NODE DATA
+    updateNodeData(node.id, values, { replace: true });
   }
 
   return (

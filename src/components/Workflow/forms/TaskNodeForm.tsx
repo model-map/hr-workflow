@@ -14,7 +14,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn_ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
-import { useState } from "react";
 import { Node, useReactFlow } from "@xyflow/react";
 
 // NODE DATA
@@ -42,7 +41,7 @@ const formSchema = z.object({
 });
 
 const TaskNodeForm = ({ node }: { node: Node }) => {
-  const { setNodes } = useReactFlow();
+  const { updateNodeData } = useReactFlow();
   const nodeData: NodeData | undefined = node.data;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -57,10 +56,8 @@ const TaskNodeForm = ({ node }: { node: Node }) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // SET NODE DATA HERE
-    setNodes((nodes) =>
-      nodes.map((n) => (n.id === node.id ? { ...node, data: values } : n))
-    );
+    // UPDATE NODE DATA
+    updateNodeData(node.id, values, { replace: true });
   }
 
   return (
