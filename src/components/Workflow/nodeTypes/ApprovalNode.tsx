@@ -1,7 +1,7 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Card } from "@/components/shadcn_ui/card";
+import { Label } from "@/components/shadcn_ui/label";
 import { NodeProps, Position } from "@xyflow/react";
 import CustomHandle from "../CustomHandle";
 import DeleteNode from "../DeleteNode";

@@ -8,14 +8,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/components/shadcn_ui/form";
+import { Input } from "@/components/shadcn_ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/shadcn_ui/button";
+import { Label } from "@/components/shadcn_ui/label";
+import { Textarea } from "@/components/shadcn_ui/textarea";
+import { DatePicker } from "@/components/ui/date-picker";
 
 // FORM SCHEMA SPECS HERE
 const formSchema = z.object({
@@ -28,6 +29,7 @@ const formSchema = z.object({
   assignee: z.string().min(3, {
     message: "Assignee must be at least 3 characters.",
   }),
+  dueDate: z.iso.datetime({ message: "Please select a Date" }),
 });
 
 const TaskNodeForm = () => {
@@ -79,6 +81,23 @@ const TaskNodeForm = () => {
               <FormLabel>Assignee</FormLabel>
               <FormControl>
                 <Input placeholder="Enter Assignee name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="dueDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Due Date</FormLabel>
+              <FormControl>
+                <DatePicker
+                  value={field.value ? new Date(field.value) : undefined}
+                  onChange={(date) => field.onChange(date?.toISOString())}
+                />
+                {/* <Input placeholder="Enter Assignee name" {...field} /> */}
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -1,5 +1,5 @@
 import { useReactFlow } from "@xyflow/react";
-import { Button } from "../ui/button";
+import { Button } from "../shadcn_ui/button";
 import { Trash2 } from "lucide-react";
 
 const DeleteNode = ({ id }: { id: string }) => {
