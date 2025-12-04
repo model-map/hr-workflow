@@ -23,13 +23,13 @@ export const initialNodes: Node[] = [
       title: "Start Node Title Here",
     },
   },
-  // {
-  //   id: "2",
-  //   data: {
-  //     label: "Node 2",
-  //   },
-  //   position: { x: 400, y: 600 },
-  // },
+  {
+    id: "2",
+    data: {
+      label: "Node 2",
+    },
+    position: { x: 400, y: 600 },
+  },
   // {
   //   id: "3",
   //   data: {

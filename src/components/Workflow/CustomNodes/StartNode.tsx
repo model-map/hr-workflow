@@ -46,6 +46,7 @@ const StartNode = () => {
   return (
     <div>
       <Label>Start Node</Label>
+
       <Card className="mt-2 py-8 px-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
