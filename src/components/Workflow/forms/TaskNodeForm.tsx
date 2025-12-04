@@ -3,7 +3,6 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,9 +13,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn_ui/button";
-import { Label } from "@/components/shadcn_ui/label";
-import { Textarea } from "@/components/shadcn_ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
+import { useState } from "react";
 
 // FORM SCHEMA SPECS HERE
 const formSchema = z.object({
@@ -30,9 +28,11 @@ const formSchema = z.object({
     message: "Assignee must be at least 3 characters.",
   }),
   dueDate: z.iso.datetime({ message: "Please select a Date" }),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
 const TaskNodeForm = () => {
+  const [metaKey, setMetaKey] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
@@ -98,6 +98,41 @@ const TaskNodeForm = () => {
                   onChange={(date) => field.onChange(date?.toISOString())}
                 />
                 {/* <Input placeholder="Enter Assignee name" {...field} /> */}
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="metadata"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Metadata</FormLabel>
+              <FormControl>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="key"
+                    onChange={(e) => {
+                      const newKey = e.target.value;
+                      setMetaKey(newKey);
+                      field.onChange({
+                        ...(field.value ?? {}),
+                        [newKey]: Object.values(field.value ?? {})[0],
+                      });
+                    }}
+                  />
+                  <Input
+                    placeholder="value"
+                    onChange={(e) => {
+                      const key = Object.keys(field.value ?? {})[0];
+                      if (!key) return;
+                      field.onChange({
+                        [metaKey]: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
