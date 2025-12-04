@@ -10,14 +10,13 @@ import TaskNodeForm from "../forms/TaskNodeForm";
 const TaskNode = ({ id }: NodeProps) => {
   return (
     <div>
-      <Label>Task Node</Label>
-
-      <Card className="mt-2 py-8 px-4">
-        <TaskNodeForm />
-        <DeleteNode id={id} />
+      <Card className="mt-2 py-4 px-16">
+        <Label>Task Node</Label>
+        {/* <TaskNodeForm /> */}
+        {/* <DeleteNode id={id} /> */}
       </Card>
+      <CustomHandle type="target" position={Position.Top} />
       <CustomHandle type="source" position={Position.Bottom} />
-      <CustomHandle type="source" position={Position.Top} />
     </div>
   );
 };

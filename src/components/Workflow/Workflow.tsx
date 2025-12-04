@@ -24,6 +24,9 @@ import TaskNode from "./nodeTypes/TaskNode";
 import ApprovalNode from "./nodeTypes/ApprovalNode";
 import AutomatedNode from "./nodeTypes/AutomatedNode";
 import EndNode from "./nodeTypes/EndNode";
+import useWorkflowClick from "./hooks/useWorkflowClick";
+import StartNodeForm from "./forms/StartNodeForm";
+import TaskNodeForm from "./forms/TaskNodeForm";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -41,6 +44,7 @@ const Workflow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { onDragStart, onDragOver, onDrop } = useWorkflowDnd();
+  const { selectedNode, onNodeClick, onPaneClick } = useWorkflowClick();
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -72,6 +76,24 @@ const Workflow = () => {
 
   return (
     <div className="h-[90%] w-[90%] border border-dotted border-black">
+      {selectedNode && (
+        <div
+          className="absolute w-[250px]
+      flex items-center bg-secondary z-10
+      rounded
+      "
+        >
+          <div className="z-20 p-4">
+            {selectedNode.type === "startNode" && (
+              <StartNodeForm node={selectedNode} />
+            )}
+            {selectedNode.type === "taskNode" && (
+              <TaskNodeForm node={selectedNode} />
+            )}
+          </div>
+        </div>
+      )}
+
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -81,10 +103,12 @@ const Workflow = () => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         isValidConnection={isValidConnection}
-        fitView
         onDragOver={onDragOver}
         onDrop={onDrop}
         colorMode="dark"
+        onNodeClick={onNodeClick}
+        onPaneClick={onPaneClick}
+        fitView
       >
         <Panel
           position="top-right"

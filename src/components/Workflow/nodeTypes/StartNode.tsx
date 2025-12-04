@@ -2,18 +2,18 @@
 
 import { Card } from "@/components/shadcn_ui/card";
 import { Label } from "@/components/shadcn_ui/label";
-import { NodeProps, Position } from "@xyflow/react";
+import { Node, NodeProps, Position } from "@xyflow/react";
 import CustomHandle from "../CustomHandle";
-import DeleteNode from "../DeleteNode";
-import StartNodeForm from "../forms/StartNodeForm";
+// import DeleteNode from "../DeleteNode";
+// import StartNodeForm from "../forms/StartNodeForm";
 
-const StartNode = ({ id }: NodeProps) => {
+const StartNode = () => {
   return (
     <div>
-      <Label>Start Node</Label>
-      <Card className="mt-2 py-8 px-4">
-        <StartNodeForm />
-        <DeleteNode id={id} />
+      <Card className="mt-2 py-4 px-8">
+        <Label>Start Node</Label>
+        {/* <StartNodeForm /> */}
+        {/* <DeleteNode id={id} /> */}
       </Card>
       <CustomHandle type="source" position={Position.Bottom} />
     </div>

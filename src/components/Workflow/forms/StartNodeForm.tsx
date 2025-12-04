@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn_ui/button";
 import { useState } from "react";
+import { Node } from "@xyflow/react";
 
 // FORM SCHEMA SPECS HERE
 const formSchema = z.object({
@@ -24,7 +25,7 @@ const formSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
-const StartNodeForm = () => {
+const StartNodeForm = ({ node }: { node: Node }) => {
   const [metaKey, setMetaKey] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

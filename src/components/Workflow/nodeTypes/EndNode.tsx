@@ -15,7 +15,6 @@ const EndNode = ({ id }: NodeProps) => {
         {/*  EndNodeForm /> */}
         <DeleteNode id={id} />
       </Card>
-      <CustomHandle type="source" position={Position.Bottom} />
       <CustomHandle type="source" position={Position.Top} />
     </div>
   );
