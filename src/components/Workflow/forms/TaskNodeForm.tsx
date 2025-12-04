@@ -17,6 +17,15 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { useState } from "react";
 import { Node, useReactFlow } from "@xyflow/react";
 
+// NODE DATA
+type NodeData = {
+  title?: string;
+  description?: string;
+  assignee?: string;
+  dueDate?: string;
+  metadata?: Record<string, unknown>;
+};
+
 // FORM SCHEMA SPECS HERE
 const formSchema = z.object({
   title: z.string().min(5, {
@@ -34,15 +43,16 @@ const formSchema = z.object({
 
 const TaskNodeForm = ({ node }: { node: Node }) => {
   const { setNodes } = useReactFlow();
-  const [metaKey, setMetaKey] = useState("");
+  const nodeData: NodeData | undefined = node.data;
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      assignee: "",
-      dueDate: "",
-      metadata: {},
+      title: nodeData?.title ?? "",
+      description: nodeData?.description ?? "",
+      assignee: nodeData?.assignee ?? "",
+      dueDate: nodeData?.dueDate ?? "",
+      metadata: nodeData?.metadata ?? {},
     },
   });
 
@@ -106,7 +116,6 @@ const TaskNodeForm = ({ node }: { node: Node }) => {
                   value={field.value ? new Date(field.value) : undefined}
                   onChange={(date) => field.onChange(date?.toISOString())}
                 />
-                {/* <Input placeholder="Enter Assignee name" {...field} /> */}
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -115,37 +124,42 @@ const TaskNodeForm = ({ node }: { node: Node }) => {
         <FormField
           control={form.control}
           name="metadata"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Metadata</FormLabel>
-              <FormControl>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="key"
-                    onChange={(e) => {
-                      const newKey = e.target.value;
-                      setMetaKey(newKey);
-                      field.onChange({
-                        ...(field.value ?? {}),
-                        [newKey]: Object.values(field.value ?? {})[0],
-                      });
-                    }}
-                  />
-                  <Input
-                    placeholder="value"
-                    onChange={(e) => {
-                      const key = Object.keys(field.value ?? {})[0];
-                      if (!key) return;
-                      field.onChange({
-                        [metaKey]: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          render={({ field }) => {
+            const entries = Object.entries(field.value ?? {});
+            const [key, rawValue] = entries[0] ?? ["", ""];
+            const value = rawValue != null ? String(rawValue) : "";
+
+            return (
+              <FormItem>
+                <FormLabel>Metadata</FormLabel>
+                <FormControl>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="key"
+                      value={key}
+                      onChange={(e) => {
+                        const newKey = e.target.value;
+                        field.onChange({
+                          [newKey]: value,
+                        });
+                      }}
+                    />
+                    <Input
+                      placeholder="value"
+                      value={value}
+                      onChange={(e) => {
+                        if (!key) return;
+                        field.onChange({
+                          [key]: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
         />
         <Button type="submit">Submit</Button>
       </form>
