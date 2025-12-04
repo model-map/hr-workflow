@@ -11,6 +11,7 @@ import {
   Edge,
   MarkerType,
   Panel,
+  MiniMap,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { initialEdges, initialNodes } from "./Workflow.constants";
@@ -108,7 +109,7 @@ const Workflow = () => {
         colorMode="dark"
         onNodeClick={onNodeClick}
         onPaneClick={onPaneClick}
-        fitView
+        // fitView
       >
         <Panel
           position="top-right"
@@ -120,6 +121,7 @@ const Workflow = () => {
         </Panel>
         <Background />
         <Controls />
+        <MiniMap />
       </ReactFlow>
     </div>
   );

@@ -10,6 +10,6 @@ const useWorkflowClick = () => {
     setSelectedNode(undefined);
   };
 
-  return { selectedNode, onNodeClick, onPaneClick };
+  return { selectedNode, setSelectedNode, onNodeClick, onPaneClick };
 };
 export default useWorkflowClick;
