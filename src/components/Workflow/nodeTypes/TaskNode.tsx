@@ -5,18 +5,20 @@ import { Label } from "@/components/shadcn_ui/label";
 import { NodeProps, Position } from "@xyflow/react";
 import CustomHandle from "../CustomHandle";
 import DeleteNode from "../DeleteNode";
-import StartNodeForm from "../forms/StartNodeForm";
+import TaskNodeForm from "../forms/TaskNodeForm";
 
-const StartNode = ({ id }: NodeProps) => {
+const TaskNode = ({ id }: NodeProps) => {
   return (
     <div>
-      <Label>Start Node</Label>
+      <Label>Task Node</Label>
+
       <Card className="mt-2 py-8 px-4">
-        <StartNodeForm />
+        <TaskNodeForm />
         <DeleteNode id={id} />
       </Card>
       <CustomHandle type="source" position={Position.Bottom} />
+      <CustomHandle type="source" position={Position.Top} />
     </div>
   );
 };
-export default StartNode;
+export default TaskNode;

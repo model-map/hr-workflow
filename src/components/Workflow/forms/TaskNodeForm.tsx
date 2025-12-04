@@ -3,7 +3,6 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,6 +13,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn_ui/button";
+import { DatePicker } from "@/components/ui/date-picker";
 import { useState } from "react";
 
 // FORM SCHEMA SPECS HERE
@@ -21,17 +21,21 @@ const formSchema = z.object({
   title: z.string().min(5, {
     message: "Title must be at least 5 characters.",
   }),
+  description: z.string().min(5, {
+    message: "Description must be at least 5 characters.",
+  }),
+  assignee: z.string().min(3, {
+    message: "Assignee must be at least 3 characters.",
+  }),
+  dueDate: z.iso.datetime({ message: "Please select a Date" }),
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
-const StartNodeForm = () => {
+const TaskNodeForm = () => {
   const [metaKey, setMetaKey] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      metadata: {},
-    },
+    defaultValues: {},
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -48,9 +52,52 @@ const StartNodeForm = () => {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Title*</FormLabel>
               <FormControl>
                 <Input placeholder="Enter Task Title" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter Description" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="assignee"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Assignee</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter Assignee name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="dueDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Due Date</FormLabel>
+              <FormControl>
+                <DatePicker
+                  value={field.value ? new Date(field.value) : undefined}
+                  onChange={(date) => field.onChange(date?.toISOString())}
+                />
+                {/* <Input placeholder="Enter Assignee name" {...field} /> */}
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,4 +143,4 @@ const StartNodeForm = () => {
     </Form>
   );
 };
-export default StartNodeForm;
+export default TaskNodeForm;

@@ -11,21 +11,26 @@ import {
   Edge,
   MarkerType,
   Panel,
-  Node,
-  useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { initialEdges, initialNodes } from "./Workflow.constants";
-import { useCallback, useRef } from "react";
+import { useCallback } from "react";
 import StartNode from "./nodeTypes/StartNode";
 import CustomEdge from "./CustomEdge";
-import { COMPONENTS, WorkflowComponentType } from "./panel/WorkflowComponents";
-import { Button } from "../ui/button";
+
 import WorkflowPanel from "./panel/WorkflowPanel";
 import useWorkflowDnd from "./hooks/useWorkflowDnd";
+import TaskNode from "./nodeTypes/TaskNode";
+import ApprovalNode from "./nodeTypes/ApprovalNode";
+import AutomatedNode from "./nodeTypes/AutomatedNode";
+import EndNode from "./nodeTypes/EndNode";
 
 const nodeTypes = {
   startNode: StartNode,
+  taskNode: TaskNode,
+  approvalNode: ApprovalNode,
+  automatedNode: AutomatedNode,
+  endNode: EndNode,
 };
 
 const edgeTypes = {
