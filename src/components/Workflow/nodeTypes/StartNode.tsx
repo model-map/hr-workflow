@@ -17,7 +17,6 @@ const StartNode = ({ id }: NodeProps) => {
         <DeleteNode id={id} />
       </Card>
       <CustomHandle type="source" position={Position.Bottom} />
-      <CustomHandle type="target" position={Position.Right} />
     </div>
   );
 };

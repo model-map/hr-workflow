@@ -21,6 +21,8 @@ import StartNode from "./nodeTypes/StartNode";
 import CustomEdge from "./CustomEdge";
 import { COMPONENTS, WorkflowComponentType } from "./panel/WorkflowComponents";
 import { Button } from "../ui/button";
+import WorkflowPanel from "./panel/WorkflowPanel";
+import useWorkflowDnd from "./hooks/useWorkflowDnd";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -30,49 +32,10 @@ const edgeTypes = {
   customEdge: CustomEdge,
 };
 
-let id = 10;
-const getId = () => `dndnode_${id++}`;
-
 const Workflow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-  const dragOutsideRef = useRef<WorkflowComponentType | null>(null);
-  const { screenToFlowPosition } = useReactFlow();
-
-  const onDragStart = (
-    event: React.DragEvent<HTMLButtonElement>,
-    nodeType: WorkflowComponentType
-  ) => {
-    dragOutsideRef.current = nodeType;
-    event.dataTransfer.effectAllowed = "move";
-  };
-
-  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
-  }, []);
-
-  const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const type = dragOutsideRef.current;
-    if (!type) {
-      return;
-    }
-
-    const position = screenToFlowPosition({
-      x: event.clientX,
-      y: event.clientY,
-    });
-
-    const newNode: Node = {
-      id: getId(),
-      type,
-      position,
-    };
-
-    setNodes((nodes) => nodes.concat(newNode));
-  };
+  const { onDragStart, onDragOver, onDrop } = useWorkflowDnd();
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -116,6 +79,7 @@ const Workflow = () => {
         fitView
         onDragOver={onDragOver}
         onDrop={onDrop}
+        colorMode="dark"
       >
         <Panel
           position="top-right"
@@ -123,33 +87,7 @@ const Workflow = () => {
           w-[200px]"
         >
           {/* PANEL  */}
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-col">
-              <h1 className="text-xs">Components</h1>
-              <div className="mt-1 gap-1 flex flex-col ">
-                {COMPONENTS.map((component) => {
-                  return (
-                    <Button
-                      variant="outline"
-                      key={component.type}
-                      draggable
-                      aria-label={component.label}
-                      onDragStart={(event) =>
-                        onDragStart(event, component.type)
-                      }
-                      className="w-full"
-                      asChild
-                    >
-                      <div className="flex">
-                        {component.icon}
-                        {component.label}
-                      </div>
-                    </Button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+          <WorkflowPanel onDragStart={onDragStart} />
         </Panel>
         <Background />
         <Controls />

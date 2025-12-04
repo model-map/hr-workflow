@@ -12,17 +12,17 @@ export const initialEdges: Edge[] = [
 ];
 
 export const initialNodes: Node[] = [
-  {
-    id: "1",
-    type: "startNode",
-    position: {
-      x: 100,
-      y: 100,
-    },
-    data: {
-      title: "Start Node Title Here",
-    },
-  },
+  // {
+  //   id: "1",
+  //   type: "startNode",
+  //   position: {
+  //     x: 100,
+  //     y: 100,
+  //   },
+  //   data: {
+  //     title: "Start Node Title Here",
+  //   },
+  // },
   // {
   //   id: "2",
   //   data: {

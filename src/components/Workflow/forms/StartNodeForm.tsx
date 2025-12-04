@@ -14,6 +14,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 // FORM SCHEMA SPECS HERE
 const formSchema = z.object({
@@ -24,6 +25,7 @@ const formSchema = z.object({
 });
 
 const StartNodeForm = () => {
+  const [metaKey, setMetaKey] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,12 +67,14 @@ const StartNodeForm = () => {
                 <div className="flex gap-2">
                   <Input
                     placeholder="key"
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const newKey = e.target.value;
+                      setMetaKey(newKey);
                       field.onChange({
                         ...(field.value ?? {}),
-                        [e.target.value]: Object.values(field.value ?? {})[0],
-                      })
-                    }
+                        [newKey]: Object.values(field.value ?? {})[0],
+                      });
+                    }}
                   />
                   <Input
                     placeholder="value"
@@ -78,7 +82,7 @@ const StartNodeForm = () => {
                       const key = Object.keys(field.value ?? {})[0];
                       if (!key) return;
                       field.onChange({
-                        [key]: e.target.value,
+                        [metaKey]: e.target.value,
                       });
                     }}
                   />
