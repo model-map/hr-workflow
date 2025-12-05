@@ -12,7 +12,6 @@ import {
   MarkerType,
   Panel,
   MiniMap,
-  useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { initialEdges, initialNodes } from "./utils/Workflow.constants";
@@ -29,7 +28,7 @@ import EndNode from "./Canvas/nodeTypes/EndNode";
 import useWorkflowClick from "./hooks/useNodeSelection";
 import StartNodeForm from "./forms/StartNodeForm";
 import TaskNodeForm from "./forms/TaskNodeForm";
-import useWorkflowValidate from "./hooks/useWorkflowValidation";
+import ApprovalNodeForm from "./forms/ApprovalNodeForm";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -92,6 +91,9 @@ const Workflow = () => {
             )}
             {selectedNode.type === "taskNode" && (
               <TaskNodeForm key={selectedNode.id} node={selectedNode} />
+            )}
+            {selectedNode.type === "approvalNode" && (
+              <ApprovalNodeForm key={selectedNode.id} node={selectedNode} />
             )}
           </div>
         </div>

@@ -9,10 +9,11 @@ import DeleteNodeButton from "../DeleteNodeButton";
 const ApprovalNode = ({ id }: NodeProps) => {
   return (
     <div>
-      <Label>Approval Node</Label>
-
-      <Card className="mt-2 py-8 px-4">
-        <DeleteNodeButton id={id} />
+      <Card className="mt-2 py-4 px-8 ">
+        <div className="flex items-center justify-between gap-4">
+          <Label>Approval Node</Label>
+          <DeleteNodeButton id={id} />
+        </div>
       </Card>
       <CustomHandle type="target" position={Position.Top} connectionCount={1} />
       <CustomHandle
