@@ -12,17 +12,19 @@ import {
 import { Input } from "@/components/shadcn_ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/shadcn_ui/button";
-import { Node, useReactFlow } from "@xyflow/react";
+import { Node, useNodesData, useReactFlow } from "@xyflow/react";
 import { SelectDropdown } from "@/components/ui/select-dropdown";
 import { APPROVERS_DATA } from "../utils/approversData";
 import { useEffect, useMemo, useState } from "react";
+import { Check } from "lucide-react";
 
 // NODE DATA
 type NodeData = {
   title?: string;
   approver?: "Manager" | "HRBP" | "Director";
+  approved?: boolean;
 };
 
 // FORM SCHEMA SPECS HERE
@@ -33,30 +35,62 @@ const formSchema = z.object({
   approver: z.enum(["Manager", "HRBP", "Director"], {
     message: "Please select an approver",
   }),
+  approved: z.boolean(),
 });
 
 const taskThresholdValue = Math.floor(Math.random() * 5) + 1;
 
+// COMPONENT
 const ApprovalNodeForm = ({ node }: { node: Node }) => {
   const { updateNodeData } = useReactFlow();
-  const nodeData: NodeData | undefined = node.data;
+  const nodeData: NodeData | undefined = useNodesData(node.id)?.data;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: nodeData?.title ?? "",
       approver: nodeData?.approver ?? "Manager",
+      approved: false,
     },
   });
 
+  const approver = useWatch({
+    control: form.control,
+    name: "approver",
+  });
+
+  const threshHoldValue = useMemo(() => {
+    return APPROVERS_DATA.find((a) => a.label === approver)
+      ?.threshold as number;
+  }, [approver]);
+
+  useEffect(() => {
+    console.log("NODE DATA: ", nodeData);
+    const autoApproved = taskThresholdValue > threshHoldValue;
+
+    // Only update approved without touching the dropdown
+    form.setValue("approved", autoApproved || nodeData?.approved || false);
+
+    if (autoApproved && !nodeData?.approved) {
+      updateNodeData(
+        node.id,
+        { ...nodeData, approved: true },
+        { replace: true }
+      );
+    }
+  }, [nodeData, threshHoldValue, form, node.id, updateNodeData]);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // UPDATE NODE DATA
-    updateNodeData(node.id, values, { replace: true });
+    updateNodeData(node.id, { ...values, approved: true }, { replace: true });
+  }
+
+  function onDecline(values: z.infer<typeof formSchema>) {
+    updateNodeData(node.id, { ...values, approved: false }, { replace: true });
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form className="space-y-8">
         <FormField
           control={form.control}
           name="title"
@@ -103,23 +137,50 @@ const ApprovalNodeForm = ({ node }: { node: Node }) => {
             );
           }}
         />
+        <FormItem>
+          <FormLabel>Task Threshold Value</FormLabel>
+          <FormDescription>
+            (Randomly Generated for prototype, Refresh Page for new value)
+          </FormDescription>
+          <FormControl>
+            <Input value={taskThresholdValue} disabled />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
         <FormField
           control={form.control}
-          name="approver"
-          render={() => (
+          name="approved"
+          render={({ field }) => (
             <FormItem>
-              <FormLabel>Task Threshold Value</FormLabel>
-              <FormDescription>
-                (Randomly Generated for prototype, Cannot be edited)
-              </FormDescription>
+              <FormLabel>Approved?</FormLabel>
               <FormControl>
-                <Input value={taskThresholdValue} disabled />
+                <input
+                  type="checkbox"
+                  checked={field.value}
+                  readOnly
+                  className="h-4 w-4"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <div className="flex flex-col gap-2">
+          <Button className="w-full" onClick={form.handleSubmit(onSubmit)}>
+            {taskThresholdValue > threshHoldValue
+              ? "Submit (Auto approved)"
+              : "Approve"}
+          </Button>
+          {taskThresholdValue <= threshHoldValue ? (
+            <Button
+              type="button"
+              className="w-full"
+              onClick={form.handleSubmit(onDecline)}
+            >
+              Decline
+            </Button>
+          ) : null}
+        </div>
       </form>
     </Form>
   );
