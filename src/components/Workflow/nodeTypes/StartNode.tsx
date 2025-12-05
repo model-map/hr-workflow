@@ -16,7 +16,11 @@ const StartNode = ({ id }: NodeProps) => {
           <DeleteNode id={id} />
         </div>
       </Card>
-      <CustomHandle type="source" position={Position.Bottom} />
+      <CustomHandle
+        type="source"
+        position={Position.Bottom}
+        connectionCount={1}
+      />
     </div>
   );
 };

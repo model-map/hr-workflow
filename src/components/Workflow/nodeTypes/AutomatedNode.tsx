@@ -15,8 +15,12 @@ const AutomatedNode = ({ id }: NodeProps) => {
         {/* <AutomatedNodeForm /> */}
         <DeleteNode id={id} />
       </Card>
-      <CustomHandle type="source" position={Position.Bottom} />
-      <CustomHandle type="source" position={Position.Top} />
+      <CustomHandle type="target" position={Position.Top} connectionCount={1} />
+      <CustomHandle
+        type="source"
+        position={Position.Bottom}
+        connectionCount={1}
+      />
     </div>
   );
 };

@@ -29,8 +29,7 @@ import EndNode from "./nodeTypes/EndNode";
 import useWorkflowClick from "./hooks/useWorkflowClick";
 import StartNodeForm from "./forms/StartNodeForm";
 import TaskNodeForm from "./forms/TaskNodeForm";
-import { COMPONENTS_LENGTH } from "./utils/WorkflowNodeRegistry";
-import { workflowValidator } from "./utils/workflowValidator";
+import useWorkflowValidate from "./hooks/useWorkflowValidate";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -49,6 +48,8 @@ const Workflow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { onDragStart, onDragOver, onDrop } = useWorkflowDnd();
   const { selectedNode, onNodeClick, onPaneClick } = useWorkflowClick();
+
+  const { isValidWorkflow } = useWorkflowValidate();
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -77,10 +78,6 @@ const Workflow = () => {
       return true;
     }
   };
-
-  // REMOVE THIS LATER
-  console.log("In Workflow.tsx");
-  workflowValidator(nodes, edges);
 
   return (
     <div className="h-[90%] w-[90%] border border-dotted border-black">

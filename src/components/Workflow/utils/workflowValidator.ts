@@ -1,4 +1,4 @@
-import { Edge, Node, useReactFlow } from "@xyflow/react";
+import { Edge, Node } from "@xyflow/react";
 import { REQUIRED_PATH } from "./WorkflowNodeRegistry";
 
 export function workflowValidator(nodes: Node[], edges: Edge[]): boolean {
@@ -9,30 +9,33 @@ export function workflowValidator(nodes: Node[], edges: Edge[]): boolean {
     outgoing.set(e.source, e.target);
   }
 
-  // console.log("in workflowValidator.ts");
-  // console.log("nodeById MAP: ", nodeById);
-  // console.log("outgoing MAP: ", outgoing);
-
   const start = nodes.find((n) => n.type === "startNode");
   if (!start) {
     return false;
   }
 
-  let current = start;
+  let current: Node | undefined = start;
 
+  console.log("in workflowValidator.ts");
   for (let i = 0; i < REQUIRED_PATH.length; i++) {
-    if (current.type !== REQUIRED_PATH[i]) {
+    console.log(`
+      NODE at POSITION ${i}: ${current?.type}
+      `);
+
+    if (!current || current.type !== REQUIRED_PATH[i]) {
       return false;
+    }
+
+    if (i === REQUIRED_PATH.length - 1) {
+      // THIS WILL ONLY BE TRUE WHEN THE LAST NODE is endNode
+      return true;
     }
 
     const nextId = outgoing.get(current.id);
-
-    if (i === REQUIRED_PATH.length - 1) {
-      return nextId === undefined; // endNode case
-    }
-
     if (!nextId) {
       return false;
     }
+    current = nodeById.get(nextId);
   }
+  return false;
 }

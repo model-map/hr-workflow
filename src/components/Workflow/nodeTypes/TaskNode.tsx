@@ -15,8 +15,12 @@ const TaskNode = ({ id }: NodeProps) => {
           <DeleteNode id={id} />
         </div>
       </Card>
-      <CustomHandle type="target" position={Position.Top} />
-      <CustomHandle type="source" position={Position.Bottom} />
+      <CustomHandle type="target" position={Position.Top} connectionCount={1} />
+      <CustomHandle
+        type="source"
+        position={Position.Bottom}
+        connectionCount={1}
+      />
     </div>
   );
 };

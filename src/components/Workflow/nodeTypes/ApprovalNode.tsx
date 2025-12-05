@@ -12,11 +12,14 @@ const ApprovalNode = ({ id }: NodeProps) => {
       <Label>Approval Node</Label>
 
       <Card className="mt-2 py-8 px-4">
-        {/* <ApprovalNodeForm /> */}
         <DeleteNode id={id} />
       </Card>
-      <CustomHandle type="source" position={Position.Bottom} />
-      <CustomHandle type="source" position={Position.Top} />
+      <CustomHandle type="target" position={Position.Top} connectionCount={1} />
+      <CustomHandle
+        type="source"
+        position={Position.Bottom}
+        connectionCount={1}
+      />
     </div>
   );
 };
