@@ -16,11 +16,11 @@ import {
 import "@xyflow/react/dist/style.css";
 import { initialEdges, initialNodes } from "./utils/Workflow.constants";
 import { useCallback } from "react";
-import StartNode from "./Canvas/nodeTypes/StartNode";
 import CustomEdge from "./Canvas/CustomEdge";
 
 import WorkflowPanel from "./Canvas/panel/WorkflowPanel";
 import useWorkflowDnd from "./hooks/useNodeDragAndDrop";
+import StartNode from "./Canvas/nodeTypes/StartNode";
 import TaskNode from "./Canvas/nodeTypes/TaskNode";
 import ApprovalNode from "./Canvas/nodeTypes/ApprovalNode";
 import AutomatedNode from "./Canvas/nodeTypes/AutomatedNode";
@@ -29,6 +29,8 @@ import useWorkflowClick from "./hooks/useNodeSelection";
 import StartNodeForm from "./forms/StartNodeForm";
 import TaskNodeForm from "./forms/TaskNodeForm";
 import ApprovalNodeForm from "./forms/ApprovalNodeForm";
+import AutomationNodeForm from "./forms/AutomationNodeForm";
+import EndNodeForm from "./forms/EndNodeForm";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -94,6 +96,12 @@ const Workflow = () => {
             )}
             {selectedNode.type === "approvalNode" && (
               <ApprovalNodeForm key={selectedNode.id} node={selectedNode} />
+            )}
+            {selectedNode.type === "automatedNode" && (
+              <AutomationNodeForm key={selectedNode.id} node={selectedNode} />
+            )}
+            {selectedNode.type === "endNode" && (
+              <EndNodeForm key={selectedNode.id} node={selectedNode} />
             )}
           </div>
         </div>

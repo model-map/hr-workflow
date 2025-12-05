@@ -29,7 +29,7 @@ const formSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
-const StartNodeForm = ({ node }: { node: Node }) => {
+const EndNodeForm = ({ node }: { node: Node }) => {
   const { updateNodeData } = useReactFlow();
   const nodeData: NodeData | undefined = useNodesData(node.id)?.data;
 
@@ -110,4 +110,4 @@ const StartNodeForm = ({ node }: { node: Node }) => {
     </Form>
   );
 };
-export default StartNodeForm;
+export default EndNodeForm;

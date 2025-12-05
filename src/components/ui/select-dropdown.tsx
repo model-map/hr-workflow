@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/shadcn_ui/select";
 
-type SelectItems = {
+export type SelectItems = {
   id: string;
   label: string;
 };
@@ -18,7 +18,7 @@ type SelectItems = {
 type SelectDropdownType = {
   label?: string;
   placeholder: string;
-  selectItems: SelectItems[];
+  selectItems?: SelectItems[];
   value?: string;
   onChange?: (value: string) => void;
 };
@@ -26,10 +26,12 @@ type SelectDropdownType = {
 export function SelectDropdown({
   label,
   placeholder,
-  selectItems,
+  selectItems = [],
   value,
   onChange,
 }: SelectDropdownType) {
+  const hasItems = selectItems.length > 0;
+
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger className="w-[180px]">
@@ -38,11 +40,18 @@ export function SelectDropdown({
       <SelectContent>
         <SelectGroup>
           {label && <SelectLabel>{label}</SelectLabel>}
-          {selectItems.map((item) => (
-            <SelectItem key={item.id} value={item.label}>
-              {item.label}
+          {hasItems &&
+            selectItems.map((item) => (
+              <SelectItem key={item.id} value={item.label}>
+                {item.label}
+              </SelectItem>
+            ))}
+
+          {!hasItems && (
+            <SelectItem value="empty" disabled>
+              No options available
             </SelectItem>
-          ))}
+          )}
         </SelectGroup>
       </SelectContent>
     </Select>

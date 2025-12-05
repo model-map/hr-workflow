@@ -17,8 +17,7 @@ import { Button } from "@/components/shadcn_ui/button";
 import { Node, useNodesData, useReactFlow } from "@xyflow/react";
 import { SelectDropdown } from "@/components/ui/select-dropdown";
 import { APPROVERS_DATA } from "../utils/approversData";
-import { useEffect, useMemo, useState } from "react";
-import { Check } from "lucide-react";
+import { useEffect, useMemo } from "react";
 
 // NODE DATA
 type NodeData = {
@@ -65,7 +64,6 @@ const ApprovalNodeForm = ({ node }: { node: Node }) => {
   }, [approver]);
 
   useEffect(() => {
-    console.log("NODE DATA: ", nodeData);
     const autoApproved = taskThresholdValue > threshHoldValue;
 
     // Only update approved without touching the dropdown
