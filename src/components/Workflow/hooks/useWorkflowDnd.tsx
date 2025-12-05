@@ -3,15 +3,21 @@
 import { Node, useReactFlow } from "@xyflow/react";
 import { useCallback, useRef } from "react";
 import { WorkflowComponentType } from "../panel/WorkflowComponents";
+import { toast } from "sonner";
 
 const useWorkflowDnd = () => {
   const dragOutsideRef = useRef<WorkflowComponentType | null>(null);
-  const { setNodes, screenToFlowPosition } = useReactFlow();
+  const { getNodes, setNodes, screenToFlowPosition } = useReactFlow();
+
+  const nodeTypes = getNodes().map((node) => node.type);
 
   const onDragStart = (
     event: React.DragEvent<HTMLButtonElement>,
     nodeType: WorkflowComponentType
   ) => {
+    if (nodeTypes.includes(nodeType)) {
+      return;
+    }
     dragOutsideRef.current = nodeType;
     event.dataTransfer.effectAllowed = "move";
   };
@@ -25,6 +31,14 @@ const useWorkflowDnd = () => {
     event.preventDefault();
     const type = dragOutsideRef.current;
     if (!type) {
+      return;
+    }
+
+    if (nodeTypes.includes(type)) {
+      toast.info("Parallel Approvals coming soon", {
+        description: "Please make do with a single workflow till then :)",
+      });
+
       return;
     }
 
