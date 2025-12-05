@@ -17,7 +17,7 @@ import { Button } from "@/components/shadcn_ui/button";
 import { Node, useReactFlow } from "@xyflow/react";
 import { SelectDropdown } from "@/components/ui/select-dropdown";
 import { APPROVERS_DATA } from "../utils/approversData";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // NODE DATA
 type NodeData = {
@@ -35,11 +35,9 @@ const formSchema = z.object({
   }),
 });
 
-const ApprovalNodeForm = ({ node }: { node: Node }) => {
-  const [taskThresholdValue] = useState(
-    () => Math.floor(Math.random() * 5) + 1
-  );
+const taskThresholdValue = Math.floor(Math.random() * 5) + 1;
 
+const ApprovalNodeForm = ({ node }: { node: Node }) => {
   const { updateNodeData } = useReactFlow();
   const nodeData: NodeData | undefined = node.data;
 
