@@ -1,7 +1,7 @@
 import { Node } from "@xyflow/react";
 import { useState } from "react";
 
-const useWorkflowClick = () => {
+const useNodeSelection = () => {
   const [selectedNode, setSelectedNode] = useState<Node | undefined>();
   const onNodeClick = (event: React.MouseEvent<Element>, node: Node) => {
     setSelectedNode(node);
@@ -12,4 +12,4 @@ const useWorkflowClick = () => {
 
   return { selectedNode, setSelectedNode, onNodeClick, onPaneClick };
 };
-export default useWorkflowClick;
+export default useNodeSelection;

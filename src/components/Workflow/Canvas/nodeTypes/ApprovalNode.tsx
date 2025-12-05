@@ -4,16 +4,15 @@ import { Card } from "@/components/shadcn_ui/card";
 import { Label } from "@/components/shadcn_ui/label";
 import { NodeProps, Position } from "@xyflow/react";
 import CustomHandle from "../CustomHandle";
-import DeleteNode from "../DeleteNode";
+import DeleteNodeButton from "../DeleteNodeButton";
 
-const AutomatedNode = ({ id }: NodeProps) => {
+const ApprovalNode = ({ id }: NodeProps) => {
   return (
     <div>
-      <Label>Automated Node</Label>
+      <Label>Approval Node</Label>
 
       <Card className="mt-2 py-8 px-4">
-        {/* <AutomatedNodeForm /> */}
-        <DeleteNode id={id} />
+        <DeleteNodeButton id={id} />
       </Card>
       <CustomHandle type="target" position={Position.Top} connectionCount={1} />
       <CustomHandle
@@ -24,4 +23,4 @@ const AutomatedNode = ({ id }: NodeProps) => {
     </div>
   );
 };
-export default AutomatedNode;
+export default ApprovalNode;

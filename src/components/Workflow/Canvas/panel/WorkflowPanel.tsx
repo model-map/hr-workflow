@@ -2,7 +2,7 @@ import { Button } from "@/components/shadcn_ui/button";
 import {
   COMPONENTS,
   WorkflowComponentType,
-} from "../utils/WorkflowNodeRegistry";
+} from "../../utils/WorkflowNodeRegistry";
 
 const WorkflowPanel = ({
   onDragStart,

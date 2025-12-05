@@ -1,9 +1,9 @@
 import { useReactFlow } from "@xyflow/react";
-import { Button } from "../shadcn_ui/button";
+import { Button } from "../../shadcn_ui/button";
 import { Trash2 } from "lucide-react";
-import useWorkflowClick from "./hooks/useWorkflowClick";
+import useWorkflowClick from "../hooks/useNodeSelection";
 
-const DeleteNode = ({ id }: { id: string }) => {
+const DeleteNodeButton = ({ id }: { id: string }) => {
   const { setNodes } = useReactFlow();
   const { setSelectedNode } = useWorkflowClick();
 
@@ -19,4 +19,4 @@ const DeleteNode = ({ id }: { id: string }) => {
     </Button>
   );
 };
-export default DeleteNode;
+export default DeleteNodeButton;

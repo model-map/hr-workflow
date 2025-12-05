@@ -17,19 +17,19 @@ import {
 import "@xyflow/react/dist/style.css";
 import { initialEdges, initialNodes } from "./utils/Workflow.constants";
 import { useCallback } from "react";
-import StartNode from "./nodeTypes/StartNode";
-import CustomEdge from "./CustomEdge";
+import StartNode from "./Canvas/nodeTypes/StartNode";
+import CustomEdge from "./Canvas/CustomEdge";
 
-import WorkflowPanel from "./panel/WorkflowPanel";
-import useWorkflowDnd from "./hooks/useWorkflowDnd";
-import TaskNode from "./nodeTypes/TaskNode";
-import ApprovalNode from "./nodeTypes/ApprovalNode";
-import AutomatedNode from "./nodeTypes/AutomatedNode";
-import EndNode from "./nodeTypes/EndNode";
-import useWorkflowClick from "./hooks/useWorkflowClick";
+import WorkflowPanel from "./Canvas/panel/WorkflowPanel";
+import useWorkflowDnd from "./hooks/useNodeDragAndDrop";
+import TaskNode from "./Canvas/nodeTypes/TaskNode";
+import ApprovalNode from "./Canvas/nodeTypes/ApprovalNode";
+import AutomatedNode from "./Canvas/nodeTypes/AutomatedNode";
+import EndNode from "./Canvas/nodeTypes/EndNode";
+import useWorkflowClick from "./hooks/useNodeSelection";
 import StartNodeForm from "./forms/StartNodeForm";
 import TaskNodeForm from "./forms/TaskNodeForm";
-import useWorkflowValidate from "./hooks/useWorkflowValidate";
+import useWorkflowValidate from "./hooks/useWorkflowValidation";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -48,8 +48,6 @@ const Workflow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { onDragStart, onDragOver, onDrop } = useWorkflowDnd();
   const { selectedNode, onNodeClick, onPaneClick } = useWorkflowClick();
-
-  const { isValidWorkflow } = useWorkflowValidate();
 
   const onConnect = useCallback(
     (connection: Connection) => {

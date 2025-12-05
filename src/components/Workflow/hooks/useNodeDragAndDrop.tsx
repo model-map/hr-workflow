@@ -5,7 +5,7 @@ import { useCallback, useMemo, useRef } from "react";
 import { WorkflowComponentType } from "../utils/WorkflowNodeRegistry";
 import { toast } from "sonner";
 
-const useWorkflowDnd = () => {
+const useNodeDragAndDrop = () => {
   const dragOutsideRef = useRef<WorkflowComponentType | null>(null);
   const { setNodes, screenToFlowPosition } = useReactFlow();
 
@@ -58,4 +58,4 @@ const useWorkflowDnd = () => {
   return { onDragStart, onDrop, onDragOver };
 };
 
-export default useWorkflowDnd;
+export default useNodeDragAndDrop;

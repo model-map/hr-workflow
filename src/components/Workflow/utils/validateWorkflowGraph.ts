@@ -1,7 +1,7 @@
 import { Edge, Node } from "@xyflow/react";
 import { REQUIRED_PATH } from "./WorkflowNodeRegistry";
 
-export function workflowValidator(nodes: Node[], edges: Edge[]): boolean {
+export function validateWorkflowGraph(nodes: Node[], edges: Edge[]): boolean {
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
   const outgoing = new Map<string, string>();
 
@@ -16,12 +16,7 @@ export function workflowValidator(nodes: Node[], edges: Edge[]): boolean {
 
   let current: Node | undefined = start;
 
-  console.log("in workflowValidator.ts");
   for (let i = 0; i < REQUIRED_PATH.length; i++) {
-    console.log(`
-      NODE at POSITION ${i}: ${current?.type}
-      `);
-
     if (!current || current.type !== REQUIRED_PATH[i]) {
       return false;
     }
