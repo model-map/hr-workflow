@@ -2,7 +2,7 @@
 
 import { Node, useReactFlow } from "@xyflow/react";
 import { useCallback, useRef } from "react";
-import { WorkflowComponentType } from "../panel/WorkflowComponents";
+import { WorkflowComponentType } from "../utils/WorkflowNodeRegistry";
 import { toast } from "sonner";
 
 const useWorkflowDnd = () => {

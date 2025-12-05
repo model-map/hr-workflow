@@ -37,8 +37,6 @@ const StartNodeForm = ({ node }: { node: Node }) => {
   const title = nodeData?.title ?? "";
   const metadata = nodeData?.metadata ?? {};
 
-  console.log("NODE :", node);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

@@ -12,9 +12,10 @@ import {
   MarkerType,
   Panel,
   MiniMap,
+  useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { initialEdges, initialNodes } from "./Workflow.constants";
+import { initialEdges, initialNodes } from "./utils/Workflow.constants";
 import { useCallback } from "react";
 import StartNode from "./nodeTypes/StartNode";
 import CustomEdge from "./CustomEdge";
@@ -28,6 +29,8 @@ import EndNode from "./nodeTypes/EndNode";
 import useWorkflowClick from "./hooks/useWorkflowClick";
 import StartNodeForm from "./forms/StartNodeForm";
 import TaskNodeForm from "./forms/TaskNodeForm";
+import { COMPONENTS_LENGTH } from "./utils/WorkflowNodeRegistry";
+import { workflowValidator } from "./utils/workflowValidator";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -74,6 +77,10 @@ const Workflow = () => {
       return true;
     }
   };
+
+  // REMOVE THIS LATER
+  console.log("In Workflow.tsx");
+  workflowValidator(nodes, edges);
 
   return (
     <div className="h-[90%] w-[90%] border border-dotted border-black">
