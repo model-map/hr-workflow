@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { Button } from "../shadcn_ui/button";
+import { Button } from "../../shadcn_ui/button";
 import {
   BezierEdge,
   EdgeLabelRenderer,

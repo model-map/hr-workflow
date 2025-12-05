@@ -1,4 +1,4 @@
-import Workflow from "@/components/Workflow/Workflow";
+import Workflow from "@/components/workflow/Workflow";
 import { ReactFlowProvider } from "@xyflow/react";
 
 export default function Home() {

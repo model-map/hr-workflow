@@ -1,0 +1,22 @@
+"use client";
+
+import { Card } from "@/components/shadcn_ui/card";
+import { Label } from "@/components/shadcn_ui/label";
+import { NodeProps, Position } from "@xyflow/react";
+import CustomHandle from "../CustomHandle";
+import DeleteNodeButton from "../DeleteNodeButton";
+
+const EndNode = ({ id }: NodeProps) => {
+  return (
+    <div>
+      <Label> End Node</Label>
+
+      <Card className="mt-2 py-8 px-4">
+        {/*  EndNodeForm /> */}
+        <DeleteNodeButton id={id} />
+      </Card>
+      <CustomHandle type="target" position={Position.Top} connectionCount={1} />
+    </div>
+  );
+};
+export default EndNode;

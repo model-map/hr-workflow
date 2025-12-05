@@ -35,3 +35,7 @@ export const COMPONENTS = [
 ] as const;
 
 export type WorkflowComponentType = (typeof COMPONENTS)[number]["type"];
+
+export const REQUIRED_PATH = COMPONENTS.map((c) => c.type);
+
+export const COMPONENTS_LENGTH = COMPONENTS.length;

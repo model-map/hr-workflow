@@ -11,19 +11,24 @@ import {
   Edge,
   MarkerType,
   Panel,
+  MiniMap,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { initialEdges, initialNodes } from "./Workflow.constants";
+import { initialEdges, initialNodes } from "./utils/Workflow.constants";
 import { useCallback } from "react";
-import StartNode from "./nodeTypes/StartNode";
-import CustomEdge from "./CustomEdge";
+import StartNode from "./Canvas/nodeTypes/StartNode";
+import CustomEdge from "./Canvas/CustomEdge";
 
-import WorkflowPanel from "./panel/WorkflowPanel";
-import useWorkflowDnd from "./hooks/useWorkflowDnd";
-import TaskNode from "./nodeTypes/TaskNode";
-import ApprovalNode from "./nodeTypes/ApprovalNode";
-import AutomatedNode from "./nodeTypes/AutomatedNode";
-import EndNode from "./nodeTypes/EndNode";
+import WorkflowPanel from "./Canvas/panel/WorkflowPanel";
+import useWorkflowDnd from "./hooks/useNodeDragAndDrop";
+import TaskNode from "./Canvas/nodeTypes/TaskNode";
+import ApprovalNode from "./Canvas/nodeTypes/ApprovalNode";
+import AutomatedNode from "./Canvas/nodeTypes/AutomatedNode";
+import EndNode from "./Canvas/nodeTypes/EndNode";
+import useWorkflowClick from "./hooks/useNodeSelection";
+import StartNodeForm from "./forms/StartNodeForm";
+import TaskNodeForm from "./forms/TaskNodeForm";
+import ApprovalNodeForm from "./forms/ApprovalNodeForm";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -41,6 +46,7 @@ const Workflow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { onDragStart, onDragOver, onDrop } = useWorkflowDnd();
+  const { selectedNode, onNodeClick, onPaneClick } = useWorkflowClick();
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -72,6 +78,27 @@ const Workflow = () => {
 
   return (
     <div className="h-[90%] w-[90%] border border-dotted border-black">
+      {selectedNode && (
+        <div
+          className="absolute w-[250px]
+      flex items-center bg-secondary z-10
+      rounded
+      "
+        >
+          <div className="z-20 p-4">
+            {selectedNode.type === "startNode" && (
+              <StartNodeForm key={selectedNode.id} node={selectedNode} />
+            )}
+            {selectedNode.type === "taskNode" && (
+              <TaskNodeForm key={selectedNode.id} node={selectedNode} />
+            )}
+            {selectedNode.type === "approvalNode" && (
+              <ApprovalNodeForm key={selectedNode.id} node={selectedNode} />
+            )}
+          </div>
+        </div>
+      )}
+
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -81,10 +108,12 @@ const Workflow = () => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         isValidConnection={isValidConnection}
-        fitView
         onDragOver={onDragOver}
         onDrop={onDrop}
         colorMode="dark"
+        onNodeClick={onNodeClick}
+        onPaneClick={onPaneClick}
+        // fitView
       >
         <Panel
           position="top-right"
@@ -96,6 +125,7 @@ const Workflow = () => {
         </Panel>
         <Background />
         <Controls />
+        <MiniMap />
       </ReactFlow>
     </div>
   );

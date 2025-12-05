@@ -14,7 +14,14 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn_ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Node, useReactFlow } from "@xyflow/react";
+
+// NODE DATA
+type NodeData = {
+  title?: string;
+  metadata?: Record<string, unknown>;
+};
 
 // FORM SCHEMA SPECS HERE
 const formSchema = z.object({
@@ -24,20 +31,23 @@ const formSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
-const StartNodeForm = () => {
-  const [metaKey, setMetaKey] = useState("");
+const StartNodeForm = ({ node }: { node: Node }) => {
+  const { updateNodeData } = useReactFlow();
+  const nodeData: NodeData | undefined = node.data;
+  const title = nodeData?.title ?? "";
+  const metadata = nodeData?.metadata ?? {};
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      metadata: {},
+      title: title,
+      metadata: metadata,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    // UPDATE NODE DATA
+    updateNodeData(node.id, values, { replace: true });
   }
 
   return (
@@ -59,37 +69,42 @@ const StartNodeForm = () => {
         <FormField
           control={form.control}
           name="metadata"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Metadata</FormLabel>
-              <FormControl>
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="key"
-                    onChange={(e) => {
-                      const newKey = e.target.value;
-                      setMetaKey(newKey);
-                      field.onChange({
-                        ...(field.value ?? {}),
-                        [newKey]: Object.values(field.value ?? {})[0],
-                      });
-                    }}
-                  />
-                  <Input
-                    placeholder="value"
-                    onChange={(e) => {
-                      const key = Object.keys(field.value ?? {})[0];
-                      if (!key) return;
-                      field.onChange({
-                        [metaKey]: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          render={({ field }) => {
+            const entries = Object.entries(field.value ?? {});
+            const [key, rawValue] = entries[0] ?? ["", ""];
+            const value = rawValue != null ? String(rawValue) : "";
+
+            return (
+              <FormItem>
+                <FormLabel>Metadata</FormLabel>
+                <FormControl>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="key"
+                      value={key}
+                      onChange={(e) => {
+                        const newKey = e.target.value;
+                        field.onChange({
+                          [newKey]: value,
+                        });
+                      }}
+                    />
+                    <Input
+                      placeholder="value"
+                      value={value}
+                      onChange={(e) => {
+                        if (!key) return;
+                        field.onChange({
+                          [key]: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
         />
         <Button type="submit">Submit</Button>
       </form>

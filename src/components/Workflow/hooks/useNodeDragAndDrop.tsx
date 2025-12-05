@@ -1,12 +1,16 @@
 "use client";
 
-import { Node, useReactFlow } from "@xyflow/react";
-import { useCallback, useRef } from "react";
-import { WorkflowComponentType } from "../panel/WorkflowComponents";
+import { Node, useReactFlow, useStore } from "@xyflow/react";
+import { useCallback, useMemo, useRef } from "react";
+import { WorkflowComponentType } from "../utils/WorkflowNodeRegistry";
+import { toast } from "sonner";
 
-const useWorkflowDnd = () => {
+const useNodeDragAndDrop = () => {
   const dragOutsideRef = useRef<WorkflowComponentType | null>(null);
   const { setNodes, screenToFlowPosition } = useReactFlow();
+
+  const nodes = useStore((state) => state.nodes);
+  const nodeTypes = useMemo(() => nodes.map((n) => n.type), [nodes]);
 
   const onDragStart = (
     event: React.DragEvent<HTMLButtonElement>,
@@ -28,6 +32,14 @@ const useWorkflowDnd = () => {
       return;
     }
 
+    if (nodeTypes.includes(type)) {
+      toast.info("Parallel Approvals coming soon", {
+        description: "Please make do with a single workflow till then :)",
+      });
+
+      return;
+    }
+
     const position = screenToFlowPosition({
       x: event.clientX,
       y: event.clientY,
@@ -46,4 +58,4 @@ const useWorkflowDnd = () => {
   return { onDragStart, onDrop, onDragOver };
 };
 
-export default useWorkflowDnd;
+export default useNodeDragAndDrop;
