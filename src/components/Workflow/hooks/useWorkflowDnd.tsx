@@ -1,23 +1,21 @@
 "use client";
 
-import { Node, useReactFlow } from "@xyflow/react";
-import { useCallback, useRef } from "react";
+import { Node, useReactFlow, useStore } from "@xyflow/react";
+import { useCallback, useMemo, useRef } from "react";
 import { WorkflowComponentType } from "../utils/WorkflowNodeRegistry";
 import { toast } from "sonner";
 
 const useWorkflowDnd = () => {
   const dragOutsideRef = useRef<WorkflowComponentType | null>(null);
-  const { getNodes, setNodes, screenToFlowPosition } = useReactFlow();
+  const { setNodes, screenToFlowPosition } = useReactFlow();
 
-  const nodeTypes = getNodes().map((node) => node.type);
+  const nodes = useStore((state) => state.nodes);
+  const nodeTypes = useMemo(() => nodes.map((n) => n.type), [nodes]);
 
   const onDragStart = (
     event: React.DragEvent<HTMLButtonElement>,
     nodeType: WorkflowComponentType
   ) => {
-    if (nodeTypes.includes(nodeType)) {
-      return;
-    }
     dragOutsideRef.current = nodeType;
     event.dataTransfer.effectAllowed = "move";
   };
