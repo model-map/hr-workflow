@@ -1,13 +1,6 @@
-import { Button } from "@/components/shadcn_ui/button";
-import { useStore } from "@xyflow/react";
+import { SheetWorkflowSimulate } from "@/components/workflow/Canvas/panel/simulateWorkflow/SheetWorkflowSimulate";
 
 const SimulateWorkflowButton = () => {
-  const nodes = useStore((state) => state.nodes);
-
-  return (
-    <Button className="w-full" variant="destructive">
-      Simulate Workflow
-    </Button>
-  );
+  return <SheetWorkflowSimulate />;
 };
 export default SimulateWorkflowButton;

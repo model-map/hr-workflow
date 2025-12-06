@@ -4,6 +4,7 @@ import {
   WorkflowComponentType,
 } from "../../utils/WorkflowNodeRegistry";
 import SimulateWorkflowButton from "./simulateWorkflow/SimulateWorkflowButton";
+import WorkflowValidityIndicator from "../WorkflowValidityIndicator";
 
 const WorkflowPanel = ({
   onDragStart,
@@ -36,8 +37,8 @@ const WorkflowPanel = ({
               </Button>
             );
           })}
-          <div className="mt-10">
-            <SimulateWorkflowButton />
+          <div className="mt-10 flex flex-col gap-2">
+            <WorkflowValidityIndicator />
           </div>
         </div>
       </div>
