@@ -11,51 +11,84 @@ import {
 import { Input } from "@/components/shadcn_ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/shadcn_ui/button";
 import { Node, useNodesData, useReactFlow } from "@xyflow/react";
 import { EndNodeDataSchema } from "../utils/formSchema.types";
 
+import { Label } from "@/components/shadcn_ui/label";
+import { Checkbox } from "@/components/shadcn_ui/checkbox";
+import { useEffect } from "react";
+import useEndNode from "../hooks/EndNodeProvider";
+
 // NODE DATA
 type NodeData = {
-  title?: string;
-  metadata?: Record<string, unknown>;
+  message?: string;
+  summary?: boolean;
 };
 
 // FORM SCHEMA SPECS HERE
 const formSchema = EndNodeDataSchema;
 
 const EndNodeForm = ({ node }: { node: Node }) => {
+  const {
+    endNodeMessage,
+    setEndNodeMessage,
+    endNodeSummary,
+    setEndNodeSummary,
+  } = useEndNode();
+
   const { updateNodeData } = useReactFlow();
   const nodeData: NodeData | undefined = useNodesData(node.id)?.data;
 
-  const title = nodeData?.title ?? "";
-  const metadata = nodeData?.metadata ?? {};
+  const message = endNodeMessage === "" ? "Simulation Pending" : endNodeMessage;
+  const summary = nodeData?.summary ?? true;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: title,
-      metadata: metadata,
+      message: message,
+      summary: summary,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     // UPDATE NODE DATA
+    const { message, summary } = values;
+    setEndNodeMessage(message);
+    setEndNodeSummary(summary);
     updateNodeData(node.id, values, { replace: true });
   }
+
+  const messageWatch = useWatch({
+    control: form.control,
+    name: "message",
+  });
+
+  const summaryWatch = useWatch({
+    control: form.control,
+    name: "summary",
+  });
+
+  useEffect(() => {
+    setEndNodeMessage(messageWatch);
+  }, [messageWatch, setEndNodeMessage]);
+
+  useEffect(() => {
+    setEndNodeSummary(summaryWatch);
+  }, [summaryWatch, setEndNodeSummary]);
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="title"
+          name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>End Message</FormLabel>
               <FormControl>
-                <Input placeholder="Enter Task Title" {...field} />
+                <Input {...field} value={endNodeMessage} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -63,43 +96,16 @@ const EndNodeForm = ({ node }: { node: Node }) => {
         />
         <FormField
           control={form.control}
-          name="metadata"
-          render={({ field }) => {
-            const entries = Object.entries(field.value ?? {});
-            const [key, rawValue] = entries[0] ?? ["", ""];
-            const value = rawValue != null ? String(rawValue) : "";
-
-            return (
-              <FormItem>
-                <FormLabel>Metadata</FormLabel>
-                <FormControl>
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="key"
-                      value={key}
-                      onChange={(e) => {
-                        const newKey = e.target.value;
-                        field.onChange({
-                          [newKey]: value,
-                        });
-                      }}
-                    />
-                    <Input
-                      placeholder="value"
-                      value={value}
-                      onChange={(e) => {
-                        if (!key) return;
-                        field.onChange({
-                          [key]: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            );
-          }}
+          name="summary"
+          render={({ field }) => (
+            <div className="flex gap-2 items-center ">
+              <Label>Summary</Label>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </div>
+          )}
         />
         <Button type="submit">Save</Button>
       </form>

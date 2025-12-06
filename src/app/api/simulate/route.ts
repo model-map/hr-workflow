@@ -7,6 +7,8 @@ export async function POST(req: NextRequest) {
   const data = await req.json();
   const validationResult = WorkflowSchema.safeParse(data);
 
+  console.log(data[4]);
+
   if (!validationResult.success) {
     // Validation failed
     const errors = validationResult.error.issues.map((err) => {

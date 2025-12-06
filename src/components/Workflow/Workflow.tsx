@@ -31,7 +31,7 @@ import TaskNodeForm from "./forms/TaskNodeForm";
 import ApprovalNodeForm from "./forms/ApprovalNodeForm";
 import AutomationNodeForm from "./forms/AutomationNodeForm";
 import EndNodeForm from "./forms/EndNodeForm";
-import useWorkflowData from "./hooks/useWorkflowData";
+import { EndNodeProvider } from "./hooks/EndNodeProvider";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -80,63 +80,65 @@ const Workflow = () => {
   };
 
   return (
-    <div className="h-[90%] w-[90%] border border-dotted border-black">
-      {selectedNode && (
-        <div
-          className="absolute w-[250px]
+    <EndNodeProvider>
+      <div className="h-[90%] w-[90%] border border-dotted border-black">
+        {selectedNode && (
+          <div
+            className="absolute w-[250px]
       flex items-center bg-secondary z-10
       rounded
       "
-        >
-          <div className="z-20 p-4">
-            {selectedNode.type === "startNode" && (
-              <StartNodeForm key={selectedNode.id} node={selectedNode} />
-            )}
-            {selectedNode.type === "taskNode" && (
-              <TaskNodeForm key={selectedNode.id} node={selectedNode} />
-            )}
-            {selectedNode.type === "approvalNode" && (
-              <ApprovalNodeForm key={selectedNode.id} node={selectedNode} />
-            )}
-            {selectedNode.type === "automatedNode" && (
-              <AutomationNodeForm key={selectedNode.id} node={selectedNode} />
-            )}
-            {selectedNode.type === "endNode" && (
-              <EndNodeForm key={selectedNode.id} node={selectedNode} />
-            )}
+          >
+            <div className="z-20 p-4">
+              {selectedNode.type === "startNode" && (
+                <StartNodeForm key={selectedNode.id} node={selectedNode} />
+              )}
+              {selectedNode.type === "taskNode" && (
+                <TaskNodeForm key={selectedNode.id} node={selectedNode} />
+              )}
+              {selectedNode.type === "approvalNode" && (
+                <ApprovalNodeForm key={selectedNode.id} node={selectedNode} />
+              )}
+              {selectedNode.type === "automatedNode" && (
+                <AutomationNodeForm key={selectedNode.id} node={selectedNode} />
+              )}
+              {/* {selectedNode.type === "endNode" && (
+                <EndNodeForm key={selectedNode.id} node={selectedNode} />
+              )} */}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        isValidConnection={isValidConnection}
-        onDragOver={onDragOver}
-        onDrop={onDrop}
-        colorMode="dark"
-        onNodeClick={onNodeClick}
-        onPaneClick={onPaneClick}
-        // fitView
-      >
-        <Panel
-          position="top-right"
-          className="border border-gray-300 p-3 rounded-xl bg-white 
-          w-[200px]"
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          isValidConnection={isValidConnection}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
+          colorMode="dark"
+          onNodeClick={onNodeClick}
+          onPaneClick={onPaneClick}
+          // fitView
         >
-          {/* PANEL  */}
-          <WorkflowPanel onDragStart={onDragStart} />
-        </Panel>
-        <Background />
-        <Controls />
-        <MiniMap />
-      </ReactFlow>
-    </div>
+          <Panel
+            position="top-right"
+            className="border border-gray-300 p-3 rounded-xl bg-white 
+          w-[200px]"
+          >
+            {/* PANEL  */}
+            <WorkflowPanel onDragStart={onDragStart} />
+          </Panel>
+          <Background />
+          <Controls />
+          <MiniMap />
+        </ReactFlow>
+      </div>
+    </EndNodeProvider>
   );
 };
 export default Workflow;

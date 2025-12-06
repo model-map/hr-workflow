@@ -11,8 +11,8 @@ import {
   SheetTrigger,
 } from "@/components/shadcn_ui/sheet";
 import { Textarea } from "@/components/shadcn_ui/textarea";
+import useEndNode from "@/components/workflow/hooks/EndNodeProvider";
 import useWorkflowData from "@/components/workflow/hooks/useWorkflowData";
-import useWorkflowValidation from "@/components/workflow/hooks/useWorkflowValidation";
 import { useState } from "react";
 
 const steps = [
@@ -32,6 +32,7 @@ export function SheetWorkflowSimulate() {
   const [step, setStep] = useState(-1); //idle at mount
   const [error, setError] = useState<string | null>(null);
   const [summary, setSummary] = useState<string[]>([]);
+  const { endNodeSummary, setEndNodeMessage } = useEndNode();
 
   const { workflowData } = useWorkflowData();
 
@@ -75,13 +76,18 @@ export function SheetWorkflowSimulate() {
       setStep(4);
 
       await simulateDelay(1800);
+      setEndNodeMessage("Task Completed Successfully");
       setLoading(false);
     } catch (errors) {
-      setError(
-        `Request Failed. Please check summary for detailed information. 
-        
-        NOTE: Turn on summaries inEndNode configuration if turned off.`
-      );
+      const errorMessage = endNodeSummary
+        ? `
+        Request Failed. Please check summary below for detailed information.`
+        : `
+        Request Failed. 
+        Turn on summaries in EndNode configuration for detailed information.`;
+
+      setError(errorMessage);
+      setEndNodeMessage("Task failed.");
       setLoading(false);
       if (Array.isArray(errors)) {
         const prettySummary = errors.map(
@@ -97,6 +103,7 @@ export function SheetWorkflowSimulate() {
     setError(null);
     setLoading(false);
     setSummary([]);
+    setEndNodeMessage("Simulation Pending.");
     runSimulation();
   };
 
@@ -123,7 +130,7 @@ export function SheetWorkflowSimulate() {
             <Label key={i}>{label}</Label>
           ))}
           {error && <Label className="text-red-500">Error: {error}</Label>}
-          {summary.length > 0 && (
+          {endNodeSummary && summary.length > 0 && (
             <Textarea
               className="pt-4"
               disabled

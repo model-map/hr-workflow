@@ -54,10 +54,8 @@ const AutomatedNodeSchema = z.object({
 const EndNodeSchema = z.object({
   type: z.literal("endNode"),
   data: z.object({
-    title: z.string("Title is required").min(5, {
-      message: "Title must be at least 5 characters.",
-    }),
-    metadata: z.record(z.string(), z.unknown()).optional(),
+    message: z.string(),
+    summary: z.boolean(),
   }),
 });
 
