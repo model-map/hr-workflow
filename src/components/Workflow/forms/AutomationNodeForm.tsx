@@ -59,11 +59,10 @@ const AutomationNodeForm = ({ node }: { node: Node }) => {
     },
   });
 
-  useEffect(() => {
-    form.reset({ title, action, param });
-  }, [title, action, form, param]);
+  useEffect(() => {}, [title, action, form, param]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
     // UPDATE NODE DATA
     updateNodeData(node.id, values, { replace: true });
   }

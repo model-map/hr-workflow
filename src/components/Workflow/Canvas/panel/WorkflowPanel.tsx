@@ -3,6 +3,7 @@ import {
   COMPONENTS,
   WorkflowComponentType,
 } from "../../utils/WorkflowNodeRegistry";
+import SimulateWorkflowButton from "./simulateWorkflow/SimulateWorkflowButton";
 
 const WorkflowPanel = ({
   onDragStart,
@@ -35,6 +36,9 @@ const WorkflowPanel = ({
               </Button>
             );
           })}
+          <div className="mt-10">
+            <SimulateWorkflowButton />
+          </div>
         </div>
       </div>
     </div>
