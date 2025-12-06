@@ -4,12 +4,15 @@ import { Trash2 } from "lucide-react";
 import useWorkflowClick from "../hooks/useNodeSelection";
 
 const DeleteNodeButton = ({ id }: { id: string }) => {
-  const { setNodes } = useReactFlow();
+  const { setNodes, setEdges } = useReactFlow();
   const { setSelectedNode } = useWorkflowClick();
 
   const handleNode = (e: React.MouseEvent) => {
     e.stopPropagation();
     setNodes((prevNodes) => prevNodes.filter((node) => node.id !== id));
+    setEdges((edges) =>
+      edges.filter((edge) => edge.source !== id && edge.target !== id)
+    );
     setSelectedNode(undefined);
   };
 
