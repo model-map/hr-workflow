@@ -79,6 +79,10 @@ const ApprovalNodeForm = ({ node }: { node: Node }) => {
   }, [nodeData, threshHoldValue, form, node.id, updateNodeData]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    updateNodeData(node.id, { ...values }, { replace: true });
+  }
+
+  function onApprove(values: z.infer<typeof formSchema>) {
     updateNodeData(node.id, { ...values, approved: true }, { replace: true });
   }
 
@@ -165,8 +169,11 @@ const ApprovalNodeForm = ({ node }: { node: Node }) => {
         />
         <div className="flex flex-col gap-2">
           <Button className="w-full" onClick={form.handleSubmit(onSubmit)}>
+            Save
+          </Button>
+          <Button className="w-full" onClick={form.handleSubmit(onApprove)}>
             {taskThresholdValue > threshHoldValue
-              ? "Submit (Auto approved)"
+              ? "(Auto approved)"
               : "Approve"}
           </Button>
           {taskThresholdValue <= threshHoldValue ? (

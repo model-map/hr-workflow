@@ -1,10 +1,11 @@
-import { Node, useNodesData, useStore } from "@xyflow/react";
+import { useStore } from "@xyflow/react";
 import { REQUIRED_PATH } from "../utils/WorkflowNodeRegistry";
 import { useEffect, useState } from "react";
 
-type WorkflowDataType = {
+export type WorkflowDataType = {
   type: string;
-  node?: Node;
+  // node?: Node;
+  data?: Record<string, unknown>;
 };
 
 const useWorkflowData = () => {
@@ -17,7 +18,8 @@ const useWorkflowData = () => {
       const node = nodes.find((n) => n.type === REQUIRED_PATH[i]) ?? undefined;
       wflowArr.push({
         type: REQUIRED_PATH[i],
-        node: node,
+        // node: node,
+        data: node?.data,
       });
     }
     setWorkflowData(wflowArr);

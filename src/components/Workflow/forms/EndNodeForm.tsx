@@ -105,7 +105,7 @@ const EndNodeForm = ({ node }: { node: Node }) => {
             );
           }}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Save</Button>
       </form>
     </Form>
   );
