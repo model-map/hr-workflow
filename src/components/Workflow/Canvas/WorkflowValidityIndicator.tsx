@@ -15,7 +15,8 @@ export default function WorkflowValidityIndicator() {
             <p>Invalid Workflow</p>
           </Button>
           <p className="text-xs w-full text-red-500">
-            (cannot run simulation without a valid workflow)
+            (cannot run simulation without a valid workflow. Please follow the
+            above linear pattern.)
           </p>
         </div>
       )}

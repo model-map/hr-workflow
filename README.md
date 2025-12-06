@@ -1,109 +1,125 @@
-## Objective
+# HR Workflow Designer Prototype
 
-- HR Workflow designer module based on **React, and React-Flow**
-- HR admin needs to be able to create and test internal workflows such as
-  - onboarding
-  - leave approval
-  - document verification
+A **Next.js + React Flow** prototype for designing and testing HR workflows. Allows creating workflows with 5 required node types and dynamic forms for each node.
 
-### DELIVERABLES
+---
 
-- React application (Built with Next.js)
-- React Flow canvas with multiple custom nodes
-- Node configuration/editing forms for each node type
-- Mock API integration
-- Workflow Test/Sandbox panel
-- README explaining architecture, design choices, and assumptions
+## Features
 
-### NOTE TO SELF
+- Colored nodes for source/target differentiation
+- Clickable nodes opening dynamic forms
+- Node data updates in real time
+- Zoom controls and minimap
+- Side panel with drag-and-drop node creation
+- Workflow validation in real time
+- Mock API:
 
-- NOTE TO SELF #1 : focus on architectural clarity, working functionality, don't get bogged down by good-looking UI
-- NOTE TO SELF #2: No authentication or backend persistence required for prototype
+  - **GET /automation** – fetches automated node actions
+  - **POST /simulate** – validates workflow execution
 
-### FUNCTIONAL REQUIREMENTS
+---
 
-#### 1. Workflow Canvas
+## Node Types & Forms
 
-- Implement a drag-and-drop workflow canvas
-- Node Types
-  - Start Node - Workflow entry point
-  - Task Node - Human task (eg - collect documents)
-  - Approval Node - manager or HR approval step
-  - Automated Step Node - system-triggered actions (eg, send email, generate PDF)
-  - End node - Workflow completion
-- Supported canvas actions
-  - Drag nodes from a sidebar onto the canvas
-  - Connect nodes with edges
-  - select a node to edit it
-  - ~~Delete nodes/edges~~
-  - Auto-validate basic constraints (e.g., Start Node must be first)
+### Start Node
 
-#### 2. Node Editing/Configuration Forms (Key requirements)
+- **Mandatory:** Title
+- **Optional:** Metadata key-value pairs
 
-- Each node type must have an editable "Node Form Panel" that appears when the node is selected
+### Task Node
 
-##### Minimum required Fields
+- **Mandatory:** Title, Description, Assignee, Due Date
+- **Optional:** Metadata key-value pairs
 
-- Start Node
-  - Start title
-  - Optional metadata key-value pairs
-- Task Node
-  - Title (required)
-  - Description
-  - Assignee (string input)
-  - Due date (text input or simple date field)
-  - Optional custom fields (key-value)
-- Approval node
-  - Title
-  - Approver role (e.g., Manager, HRBP, Director)
-  - Auto-approve threshold (number)
-- Automated step node
-  - Title
-  - Choose an action from a mock API list
-  - Action parameters (dynamic based on mock action definition)
-- End Node
-  - End message
-  - Summary flag (boolean toggle)
+### Approval Node
 
-##### Evaluation:
+- **Mandatory:** Title, Approved status
+- Randomly generated task threshold for auto-approval
 
-- dynamic forms
-- controlled components
-- clean state handling
-- type safety
-- modularity
+### Automated Node
 
-#### 3. Mock API Layer
+- **Mandatory:** Title
+- Action fetched from `/automation` API dynamically updates parameters
 
-- Create a lightweight API layer using JSON server, MSW or local mocks
-- /GET /automation
-  - Returns mock automated actions such as
-    - [ { "id": "send_email", "label": "Send Email", "params": ["to", "subject"] }, { "id": "generate_doc", "label": "Generate Document", "params": ["template", "recipient"] }]
-- /POST /simulate
-  - Accepts workflow JSON and returns a mock step-by-step execution result
+### End Node
 
-#### 4. Workflow Testing/Sandbox Panel
+- Toggle summary
+- End message dynamically reflects simulation result: `"Simulation Pending"`, `"Task Successful"`, or `"Task Failed"`
 
-A small panel or modal that - Serialises the entire workflow graph - Sends it to mock /simulate API - Displays a step-by-step execution log (basic text or timeline UI) - Validates structure (e.g., missing connections, cycles)
+---
 
-Idea is to test the candidate’s reasoning around state, graph structures, and API workflows.
+## Folder Structure
 
-#### 5. Architectural Expectations
+```
+src
+├── app
+│   ├── api
+│   │   ├── automation/route.ts
+│   │   └── simulate/route.ts
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components
+│   ├── shadcn_ui          # Reusable UI components
+│   ├── ui                 # Custom inputs (Date picker, dropdown)
+│   └── workflow
+│       ├── Canvas         # React Flow canvas & node types
+│       ├── forms          # Node configuration forms
+│       ├── hooks          # Custom hooks for nodes & workflow
+│       └── utils          # Workflow constants, validation, schemas
+├── hooks                  # Global hooks (e.g., mobile detection)
+├── lib                    # Utility functions
+└── types                  # Type definitions
+```
 
-- A clean folder structure
-- Separation of canvas logic, node logic, and API logic
-- Reusable custom hooks
-- Ability to design abstractions that scale
-- Thoughtful component decomposition
-- Form structure that can be extended to new node types
-- Clarity of interfaces/types for workflow nodes
+---
 
-#### 6. BONUS
+## Getting Started
 
-- Export/Import workflows as JSON
-- Node Templates
-- Undo/Redo
-- Mini-map or zoom controls
-- Workflow validations errors visually shown on nodes
-- Auto-layout
-- Node version history
+1. **Install pnpm (if not already installed)**
+
+```bash
+npm install -g pnpm
+```
+
+2. **Clone the repository**
+
+```bash
+git clone git@github.com:model-map/hr-workflow.git
+cd hr-workflow
+```
+
+3. **Install dependencies**
+
+```bash
+pnpm install
+```
+
+4. **Run the development server**
+
+```bash
+pnpm dev
+```
+
+5. Open [http://localhost:3000](http://localhost:3000) to view the prototype.
+
+---
+
+## Architecture Highlights
+
+- **React Flow canvas** separates node logic from canvas logic
+- **Dynamic forms** for each node type using controlled components
+- **Custom hooks** for drag-and-drop, node selection, and workflow validation
+- **Mock API** for simulating automated node execution and validating workflow
+
+---
+
+## Future Enhancements
+
+- Parallel approvals
+- Allow array of multiple key-value pairs
+- Export/import workflows as JSON
+- Undo/Redo functionality
+- Node templates and version history
+- Auto-layout and enhanced visual validation
+- Extended mock API for more complex simulation

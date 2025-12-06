@@ -120,7 +120,7 @@ const Workflow = () => {
           isValidConnection={isValidConnection}
           onDragOver={onDragOver}
           onDrop={onDrop}
-          colorMode="dark"
+          colorMode="light"
           onNodeClick={onNodeClick}
           onPaneClick={onPaneClick}
           // fitView
