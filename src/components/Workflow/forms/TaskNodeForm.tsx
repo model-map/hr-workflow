@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn_ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Node, useReactFlow } from "@xyflow/react";
+import { TaskNodeDataSchema } from "../utils/formSchema.types";
 
 // NODE DATA
 type NodeData = {
@@ -26,19 +27,7 @@ type NodeData = {
 };
 
 // FORM SCHEMA SPECS HERE
-const formSchema = z.object({
-  title: z.string().min(5, {
-    message: "Title must be at least 5 characters.",
-  }),
-  description: z.string().min(5, {
-    message: "Description must be at least 5 characters.",
-  }),
-  assignee: z.string().min(3, {
-    message: "Assignee must be at least 3 characters.",
-  }),
-  dueDate: z.iso.datetime({ message: "Please select a Date" }),
-  metadata: z.record(z.string(), z.unknown()).optional(),
-});
+const formSchema = TaskNodeDataSchema;
 
 const TaskNodeForm = ({ node }: { node: Node }) => {
   const { updateNodeData } = useReactFlow();

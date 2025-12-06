@@ -18,6 +18,7 @@ import { Node, useNodesData, useReactFlow } from "@xyflow/react";
 import { SelectDropdown } from "@/components/ui/select-dropdown";
 import { APPROVERS_DATA } from "../utils/approversData";
 import { useEffect, useMemo } from "react";
+import { ApprovalNodeDataSchema } from "../utils/formSchema.types";
 
 // NODE DATA
 type NodeData = {
@@ -27,15 +28,7 @@ type NodeData = {
 };
 
 // FORM SCHEMA SPECS HERE
-const formSchema = z.object({
-  title: z.string().min(5, {
-    message: "Title must be at least 5 characters.",
-  }),
-  approver: z.enum(["Manager", "HRBP", "Director"], {
-    message: "Please select an approver",
-  }),
-  approved: z.boolean(),
-});
+const formSchema = ApprovalNodeDataSchema;
 
 const taskThresholdValue = Math.floor(Math.random() * 5) + 1;
 

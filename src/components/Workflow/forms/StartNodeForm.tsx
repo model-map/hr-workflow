@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn_ui/button";
 import { Node, useNodesData, useReactFlow } from "@xyflow/react";
+import { StartNodeDataSchema } from "../utils/formSchema.types";
 
 // NODE DATA
 type NodeData = {
@@ -22,12 +23,7 @@ type NodeData = {
 };
 
 // FORM SCHEMA SPECS HERE
-const formSchema = z.object({
-  title: z.string().min(5, {
-    message: "Title must be at least 5 characters.",
-  }),
-  metadata: z.record(z.string(), z.unknown()).optional(),
-});
+const formSchema = StartNodeDataSchema;
 
 const StartNodeForm = ({ node }: { node: Node }) => {
   const { updateNodeData } = useReactFlow();

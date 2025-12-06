@@ -17,6 +17,7 @@ import { Node, useNodesData, useReactFlow } from "@xyflow/react";
 import useFetchAutomation from "../hooks/useFetchAutomation";
 import { SelectDropdown, SelectItems } from "@/components/ui/select-dropdown";
 import { useEffect } from "react";
+import { AutomatedNodeDataSchema } from "../utils/formSchema.types";
 
 // NODE DATA
 type NodeData = {
@@ -26,13 +27,7 @@ type NodeData = {
 };
 
 // FORM SCHEMA SPECS HERE
-const formSchema = z.object({
-  title: z.string().min(5, {
-    message: "Title must be at least 5 characters.",
-  }),
-  action: z.string().min(1, "Action is required"),
-  param: z.string().min(1, "Param is required"),
-});
+const formSchema = AutomatedNodeDataSchema;
 
 const AutomationNodeForm = ({ node }: { node: Node }) => {
   const { automationActions } = useFetchAutomation();

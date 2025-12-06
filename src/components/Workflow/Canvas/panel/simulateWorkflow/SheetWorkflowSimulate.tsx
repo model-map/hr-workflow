@@ -31,13 +31,13 @@ export function SheetWorkflowSimulate() {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(-1); //idle at mount
   const [error, setError] = useState<string | null>(null);
-  const [summary, setSummary] = useState<string>("");
+  const [summary, setSummary] = useState<string[]>([]);
 
-  const { isValidWorkflow } = useWorkflowValidation();
   const { workflowData } = useWorkflowData();
 
   const runSimulation = async () => {
     try {
+      setSummary([]);
       setError(null);
       setLoading(true);
       //   "Serialising your data",
@@ -53,6 +53,12 @@ export function SheetWorkflowSimulate() {
         body: payload,
       });
 
+      // CHECK STATUS
+      if (res.status !== 200) {
+        const { errors } = await res.json();
+        throw errors;
+      }
+
       // "Waiting for response"
       await simulateDelay(1800);
       setStep(2);
@@ -61,20 +67,27 @@ export function SheetWorkflowSimulate() {
       // "Response received"
       await simulateDelay(1800);
       setStep(3);
-      console.log(data);
+      console.log("DATA ON CLIENT: ", data);
 
       // "Summary"
       await simulateDelay(1800);
-      setSummary("YOUR SUMMARY HERE");
+      setSummary([data.message]);
       setStep(4);
 
       await simulateDelay(1800);
       setLoading(false);
-    } catch (e) {
+    } catch (errors) {
+      setError(
+        `Request Failed. Please check summary for detailed information. 
+        
+        NOTE: Turn on summaries inEndNode configuration if turned off.`
+      );
       setLoading(false);
-      if (e instanceof Error) {
-        setError(e.message);
-        // setStep(4);
+      if (Array.isArray(errors)) {
+        const prettySummary = errors.map(
+          (e) => `${e.nodeType} -> ${e.field}: ${e.message}`
+        );
+        setSummary(prettySummary);
       }
     }
   };
@@ -83,7 +96,7 @@ export function SheetWorkflowSimulate() {
     setStep(-1);
     setError(null);
     setLoading(false);
-    setSummary("");
+    setSummary([]);
     runSimulation();
   };
 
@@ -109,12 +122,17 @@ export function SheetWorkflowSimulate() {
           {steps.slice(0, step + 1).map((label, i) => (
             <Label key={i}>{label}</Label>
           ))}
-          {typeof summary === "string" && summary.trim().length > 0 && (
-            <Textarea className="text-center pt-4" disabled value={summary}>
-              {summary}
-            </Textarea>
-          )}
           {error && <Label className="text-red-500">Error: {error}</Label>}
+          {summary.length > 0 && (
+            <Textarea
+              className="pt-4"
+              disabled
+              value={summary
+                .filter((s) => typeof s === "string" && s.trim().length > 0)
+                .map((s, i) => `• ${s}`)
+                .join("\n")}
+            />
+          )}
         </div>
 
         <SheetFooter>
